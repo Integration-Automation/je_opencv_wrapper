@@ -1,6 +1,9 @@
 from Feature_Detection import Feature_Detection
 from Template_Detection import Template_Detection
 from Feature import Feature
+from Object_Tracking import Object_Tracking
+from OpenCV_IO import OpenCV_IO
+from OpenCV_Video import OpenCV_Video
 
 class OpenCV_Core():
 
@@ -9,5 +12,8 @@ class OpenCV_Core():
             self.Feature_Detection=Feature_Detection()
             self.Template_Detection=Template_Detection()
             self.Feature=Feature()
+            self.Object_Tracking=Object_Tracking()
+            self.OpenCV_IO=OpenCV_IO()
+            self.OpenCV_Video=OpenCV_Video()
         except Exception as Errr:
             raise Errr
