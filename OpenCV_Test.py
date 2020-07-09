@@ -3,6 +3,16 @@ import cv2
 
 from OpenCV_Core import OpenCV_Core
 a=OpenCV_Core()
-a.Feature_Detection.Find_Obeject('box.png','find.png')
+a.Feature_Detection.FLANN_Match()
 
+'''
+c=a.Feature.ORB_Feature('may.png')
+cv2.imshow('may',c)
+cv2.waitKey()
+'''
 
+'''
+c=a.Template_Detection.Find_Multi_Object('box.png','find_umbrella.png')
+cv2.imshow('oo',c)
+cv2.waitKey()
+'''
