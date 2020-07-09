@@ -4,6 +4,7 @@ from Feature import Feature
 from Object_Tracking import Object_Tracking
 from OpenCV_IO import OpenCV_IO
 from OpenCV_Video import OpenCV_Video
+from Draw import Draw
 
 class OpenCV_Core():
 
@@ -15,5 +16,6 @@ class OpenCV_Core():
             self.Object_Tracking=Object_Tracking()
             self.OpenCV_IO=OpenCV_IO()
             self.OpenCV_Video=OpenCV_Video()
+            self.Draw=Draw()
         except Exception as Errr:
             raise Errr
