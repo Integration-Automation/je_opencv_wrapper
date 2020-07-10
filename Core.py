@@ -8,6 +8,8 @@ from Draw import Draw
 from Event import Event
 from Image_Processing import Image_Processing
 from UI import UI
+from Image_Operations import Image_Operations
+from FPS import FPS
 
 class Core():
 
@@ -23,5 +25,7 @@ class Core():
             self.Event=Event()
             self.Image_Processing=Image_Processing()
             self.UI=UI()
+            self.Image_Operations=Image_Operations()
+            self.FPS=FPS()
         except Exception as Errr:
             raise Errr
