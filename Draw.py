@@ -17,6 +17,8 @@ class Draw():
 
     def __init__(self):
         self.Canvas=self.Create_Canvas()
+        self.Clear_Key='c'
+        self.Clear_Flag=True
 
     def Create_Canvas(self):
         # Create a black image
@@ -40,11 +42,23 @@ class Draw():
         pts = pts.reshape((-1, 1, 2))
         self.Canvas = cv2.polylines(self.Canvas, [pts], True, (0, 255, 255))
 
-    def Draw_Text(self):
+    def Draw_Text(self,Text='OpenCV'):
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(self.Canvas, 'OpenCV', (10, 500), font, 4, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(self.Canvas, Text, (10, 500), font, 4, (255, 255, 255), 2, cv2.LINE_AA)
 
-    def Show_Canvas(self):
-        cv2.imshow('Canvas',self.Canvas)
-        cv2.waitKey()
+    def Clear_Canvas(self,Clear_Flag=True):
+        self.Clear_Flag=Clear_Flag
+
+    def Show_Canvas(self,Canvas_Name='Canvas'):
+        while (1):
+            cv2.imshow(Canvas_Name, self.Canvas)
+
+            Key= cv2.waitKey(1) & 0xFF
+
+            if Key == ord('q') or Key == 27:
+                break
+
+            elif Key == ord(self.Clear_Key) and self.Clear_Flag == True:
+                self.Canvas=self.Create_Canvas()
+
         cv2.destroyAllWindows()
