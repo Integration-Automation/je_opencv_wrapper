@@ -225,9 +225,7 @@ class Event():
 
 
     def Set_Callback_Event(self,Window_Name):
-        cv2.namedWindow(Window_Name)
         cv2.setMouseCallback(Window_Name,self.Set_Event)
 
     def Set_Callback_Function(self,Window_Name,Job_Function):
-        cv2.namedWindow(Window_Name)
         cv2.setMouseCallback(Window_Name,Job_Function)
