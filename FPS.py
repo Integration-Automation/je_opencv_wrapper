@@ -1,5 +1,8 @@
 import cv2
-import numpy
+
+'''
+計算及更改執行效率
+'''
 
 class FPS():
 

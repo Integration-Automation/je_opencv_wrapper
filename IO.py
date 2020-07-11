@@ -1,5 +1,7 @@
 import cv2
-
+'''
+基本的輸出入圖片
+'''
 class IO:
 
     def __init__(self):

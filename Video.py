@@ -1,5 +1,9 @@
 import cv2
 
+'''
+影片處理
+'''
+
 class Video():
 
     def __init__(self):

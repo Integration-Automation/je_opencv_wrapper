@@ -1,6 +1,9 @@
 import cv2
-import numpy as np
-from matplotlib import pyplot as plt
+
+'''
+特徵點檢測
+'''
+
 class Feature():
 
     def __init__(self):

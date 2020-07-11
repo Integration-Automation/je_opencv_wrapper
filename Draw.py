@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
 
+'''
+處理畫面更新 畫畫面等
+'''
+
 class Draw():
 
     '''

@@ -1,5 +1,9 @@
 import cv2
 
+'''
+圖片閥值化
+'''
+
 class Thresholding():
 
     def __init__(self):

@@ -1,4 +1,9 @@
 import cv2
+
+'''
+負責處理事件
+'''
+
 class Event():
 
     '''

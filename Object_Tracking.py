@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
 
+'''
+物件追蹤
+'''
+
 class Object_Tracking():
 
     def __init__(self):

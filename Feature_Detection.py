@@ -1,6 +1,9 @@
 import cv2
-import numpy as np
 from matplotlib import pyplot as plt
+
+'''
+依照特徵點比對
+'''
 
 class Feature_Detection():
 

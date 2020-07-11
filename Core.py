@@ -15,6 +15,12 @@ from Smoothing import Smoothing
 from Morphological import Morphological
 from Edge import Edge
 from Gradients import Gradients
+from Pyramids import Pyramids
+from Contours import Contours
+
+'''
+主核心 從這裡選擇功能跟 import 
+'''
 
 class Core():
 
@@ -33,5 +39,11 @@ class Core():
             self.Image_Operations=Image_Operations()
             self.FPS=FPS()
             self.Thresholding=Thresholding()
+            self.Smoothing=Smoothing()
+            self.Morphological=Morphological()
+            self.Edge=Edge()
+            self.Gradients=Gradients()
+            self.Pyramids=Pyramids()
+            self.Contours=Contours()
         except Exception as Errr:
             raise Errr

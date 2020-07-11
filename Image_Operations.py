@@ -1,5 +1,8 @@
 import cv2
-import numpy as np
+
+'''
+基本圖像處理用
+'''
 
 class Image_Operations():
 
@@ -13,15 +16,19 @@ class Image_Operations():
         Total.append(Image.dtype)
         return Total
 
+    #取得圖像 行 列 通道數
     def Get_Image_Shape(self,Image):
         return Image.shape
 
+    #取得 圖片大小
     def Get_Image_Size(self,Image):
         return Image.size
 
+    #取得圖片類型
     def Get_Image_Type(self,Image):
         return Image.dtype
 
+    #分割通道
     def Split_Image(self,Image):
         B,G,R=cv2.split(Image)
         return [B,G,R]
@@ -37,6 +44,8 @@ class Image_Operations():
     
      img[:,:,2] = 0
     '''
+
+    #組合通道
     def Merge_Image(self,B,G,R):
         return cv2.merge((B,G,R))
 
@@ -113,6 +122,7 @@ class Image_Operations():
     Here I took two images to blend them together. 
     First image is given a weight of 0.7 and second image is given 0.3. cv2.addWeighted() applies following equation on the image.
     '''
+    # 合併2張圖片 採用透明度
     def Image_Blending(self,Image1,Image1_Alpha,Image2,Image2_Alpha):
         return cv2.addWeighted(Image1,Image1_Alpha,Image2,Image2_Alpha,0)
 

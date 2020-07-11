@@ -1,5 +1,8 @@
 import cv2
-import numpy
+
+'''
+用OpenCV做的模塊
+'''
 
 class UI():
 

@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
+'''
+對圖片的物件進行尋找
+'''
 class Template_Detection():
 
     def __init__(self):

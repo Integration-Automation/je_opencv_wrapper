@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
-
+'''
+基本的型態改變
+'''
 class Morphological():
 
     def __init__(self):
@@ -17,6 +19,7 @@ class Morphological():
       So the thickness or size of the foreground object decreases or simply white region decreases in the image. 
        It is useful for removing small white noises (as we have seen in colorspace chapter), detach two connected objects etc.
     '''
+    #侵蝕
     def Erosion(self,Image,kernel=(5,5)):
         return cv2.erode(Image, np.ones(kernel, np.uint8), iterations=1)
 
@@ -29,6 +32,7 @@ class Morphological():
     So we dilate it. Since noise is gone, they won’t come back, but our object area increases. 
     It is also useful in joining broken parts of an object.
     '''
+    #擴張
     def Dilation(self,Image,kernel=(5,5)):
         return cv2.dilate(Image, np.ones(kernel, np.uint8), iterations=1)
 
@@ -37,6 +41,7 @@ class Morphological():
     It is useful in removing noise, as we explained above. 
     Here we use the function, cv2.morphologyEx()
     '''
+    #侵蝕 + 擴張
     def Opening(self,Image,kernel=(5,5)):
         return cv2.morphologyEx(Image, cv2.MORPH_OPEN, np.ones(kernel, np.uint8))
 
@@ -44,6 +49,7 @@ class Morphological():
     Closing is reverse of Opening, Dilation followed by Erosion. 
     It is useful in closing small holes inside the foreground objects, or small black points on the object.
     '''
+    # 侵蝕+膨脹
     def Closing(self,Image,kernel=(5,5)):
         return cv2.morphologyEx(Image, cv2.MORPH_CLOSE, np.ones(kernel, np.uint8))
 
