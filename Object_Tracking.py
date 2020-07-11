@@ -100,3 +100,43 @@ class Object_Tracking():
 
         cv2.destroyAllWindows()
         cap.release()
+
+
+    '''
+    How to find HSV values to track?
+    >>> green = np.uint8([[[0,255,0 ]]])
+    >>> hsv_green = cv2.cvtColor(green,cv2.COLOR_BGR2HSV)
+    >>> print (hsv_green)
+    [[[ 60 255 255]]]
+    '''
+    def Tracking_Color(self,Video,Track_Range_Lower=[110, 50, 50],Track_Range_Upper=[130, 255, 255]):
+        cap = cv2.VideoCapture(Video)
+
+        while (1):
+
+            # Take each frame
+            _, frame = cap.read()
+
+            # Convert BGR to HSV
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+            # define range of blue color in HSV
+            lower_blue = np.array(Track_Range_Lower)
+            upper_blue = np.array(Track_Range_Upper)
+
+            # Threshold the HSV image to get only blue colors
+            mask = cv2.inRange(hsv, lower_blue, upper_blue)
+
+            # Bitwise-AND mask and original image
+            res = cv2.bitwise_and(frame, frame, mask=mask)
+
+            cv2.imshow('frame', frame)
+            cv2.imshow('mask', mask)
+            cv2.imshow('res', res)
+            k = cv2.waitKey(1) & 0xFF
+            if k == 27:
+                break
+            elif k == ord('q'):
+                break
+
+        cv2.destroyAllWindows()

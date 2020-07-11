@@ -6,10 +6,15 @@ from IO import IO
 from Video import Video
 from Draw import Draw
 from Event import Event
-from Image_Processing import Image_Processing
+from Basic_Image_Processing import Basic_Image_Processing
 from UI import UI
 from Image_Operations import Image_Operations
 from FPS import FPS
+from Thresholding import Thresholding
+from Smoothing import Smoothing
+from Morphological import Morphological
+from Edge import Edge
+from Gradients import Gradients
 
 class Core():
 
@@ -23,9 +28,10 @@ class Core():
             self.Video=Video()
             self.Draw=Draw()
             self.Event=Event()
-            self.Image_Processing=Image_Processing()
+            self.Basic_Image_Processing=Basic_Image_Processing()
             self.UI=UI()
             self.Image_Operations=Image_Operations()
             self.FPS=FPS()
+            self.Thresholding=Thresholding()
         except Exception as Errr:
             raise Errr
