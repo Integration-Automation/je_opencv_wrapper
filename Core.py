@@ -17,7 +17,9 @@ from Edge import Edge
 from Gradients import Gradients
 from Pyramids import Pyramids
 from Contours import Contours
-
+from Fourier import Fourier
+from Histograms import Histograms
+from Hough_Line import Hough_Line
 '''
 主核心 從這裡選擇功能跟 import 
 '''
@@ -45,5 +47,8 @@ class Core():
             self.Gradients=Gradients()
             self.Pyramids=Pyramids()
             self.Contours=Contours()
+            self.Fourier = Fourier()
+            self.Histograms=Histograms()
+            self.Hough_Line=Hough_Line()
         except Exception as Errr:
             raise Errr

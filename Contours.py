@@ -11,6 +11,8 @@ findContours function modifies the source image.
 So if you want source image even after finding contours, already store it to some other variables.
 In OpenCV, finding contours is like finding white object from black background. 
 So remember, object to be found should be white and background should be black.
+
+得到特徵 並畫出輪廓區域
 '''
 class Contours():
 
@@ -221,3 +223,157 @@ class Contours():
         lefty = int((-x * vy / vx) + y)
         righty = int(((cols - x) * vy / vx) + y)
         return cv2.line(Image, (cols - 1, righty), (0, lefty), (0, 255, 0), 2)
+
+    '''
+    1. Aspect Ratio
+    It is the ratio of width to height of bounding rect of the object.
+    長寬比
+    '''
+    def Aspect_Ratio(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        x, y, w, h = cv2.boundingRect(cnt)
+        return float(w) / h
+
+    '''
+    2. Extent
+    Extent is the ratio of contour area to bounding rectangle area.
+    範圍
+    '''
+    def Extent(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        area = cv2.contourArea(cnt)
+        x, y, w, h = cv2.boundingRect(cnt)
+        rect_area = w * h
+        return float(area) / rect_area
+
+    '''
+    3. Solidity
+    Solidity is the ratio of contour area to its convex hull area.
+    堅固度是輪廓面積與其凸包面積的比率。
+    '''
+    def Solidity(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        area = cv2.contourArea(cnt)
+        hull = cv2.convexHull(cnt)
+        hull_area = cv2.contourArea(hull)
+        return float(area) / hull_area
+
+    '''
+    4. Equivalent Diameter
+    Equivalent Diameter is the diameter of the circle whose area is same as the contour area.
+    等效直徑
+    '''
+    def Equivalent_Diameter(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        area = cv2.contourArea(cnt)
+        return np.sqrt(4 * area / np.pi)
+
+    '''
+    5. Orientation
+    Orientation is the angle at which object is directed. 
+    Following method also gives the Major Axis and Minor Axis lengths.
+    '''
+    def Orientation(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        return cv2.fitEllipse(cnt)
+
+    '''
+    6. Mask and Pixel Points
+    In some cases, we may need all the points which comprises that object
+    '''
+    def Mask_and_Pixel_Points(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        mask = np.zeros(thresh.shape, np.uint8)
+        cv2.drawContours(mask, [cnt], 0, 255, -1)
+        return np.transpose(np.nonzero(mask))
+        # pixelpoints = cv2.findNonZero(mask)
+    '''
+    Here, two methods, one using Numpy functions, next one using OpenCV function (last commented line) are given to do the same.
+    Results are also same, but with a slight difference. 
+    Numpy gives coordinates in (row, column) format, while OpenCV gives coordinates in (x,y) format. 
+    So basically the answers will be interchanged. Note that, row = x and column = y.
+    在這裡，給出了兩種方法，一種使用Numpy函數，另一種使用OpenCV函數（最後註釋的行）執行相同的操作。
+    結果也相同，但略有不同。Numpy以（行，列）格式給出坐標，而OpenCV以（x，y）格式給出坐標。
+    因此，基本上答案是可以互換的。
+    ! 注意，row = x，column = y
+    '''
+
+    '''
+    7. Maximum Value, Minimum Value and their locations
+    We can find these parameters using a mask image.
+    '''
+    def Value_locations(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        mask = np.zeros(thresh.shape, np.uint8)
+        return cv2.minMaxLoc(thresh, mask=mask)
+
+    '''
+    8. Mean Color or Mean Intensity
+    Here, we can find the average color of an object. 
+    Or it can be average intensity of the object in grayscale mode. 
+    We again use the same mask to do it.
+    '''
+    def Intensity(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        mask = np.zeros(thresh.shape, np.uint8)
+        return cv2.mean(Image, mask=mask)
+
+    '''
+    9. Extreme Points
+    Extreme Points means topmost, bottommost, rightmost and leftmost points of the object.
+    '''
+    def Extreme(self,Image,Start=127,End=255):
+        ret, thresh = cv2.threshold(Image, Start, End, 0)
+        contours, hierarchy = cv2.findContours(thresh, 1, 2)
+        cnt = contours[0]
+        leftmost = tuple(cnt[cnt[:, :, 0].argmin()][0])
+        rightmost = tuple(cnt[cnt[:, :, 0].argmax()][0])
+        topmost = tuple(cnt[cnt[:, :, 1].argmin()][0])
+        bottommost = tuple(cnt[cnt[:, :, 1].argmax()][0])
+        return leftmost,rightmost,topmost,bottommost
+
+    '''
+    It returns an array where each row contains these values
+    [ start point, end point, farthest point, approximate distance to farthest point ].
+    We can visualize it using an image. We draw a line joining start point and end point, then draw a circle at the farthest point. 
+    Remember first three values returned are indices of cnt. So we have to bring those values from cnt.
+    '''
+
+    def Convexity_Defects(self,Image):
+        img_gray = cv2.cvtColor(Image, cv2.COLOR_BGR2GRAY)
+        ret, thresh = cv2.threshold(img_gray, 127, 255, 0)
+        contours, hierarchy = cv2.findContours(thresh, 2, 1)
+        cnt = contours[0]
+        hull = cv2.convexHull(cnt, returnPoints=False)
+        return cv2.convexityDefects(cnt, hull)
+
+    '''
+    OpenCV comes with a function cv2.matchShapes() which enables us to compare two shapes, 
+    or two contours and returns a metric showing the similarity. The lower the result, the better match it is. 
+    It is calculated based on the hu-moment values. Different measurement methods are explained in the docs.
+    '''
+
+    def Match_Shapes(self,Image1,Image2):
+        ret, thresh = cv2.threshold(Image1, 127, 255, 0)
+        ret, thresh2 = cv2.threshold(Image2, 127, 255, 0)
+        contours, hierarchy = cv2.findContours(thresh, 2, 1)
+        cnt1 = contours[0]
+        contours, hierarchy = cv2.findContours(thresh2, 2, 1)
+        cnt2 = contours[0]
+        return cv2.matchShapes(cnt1, cnt2, 1, 0.0)
