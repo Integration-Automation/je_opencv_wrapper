@@ -1,3 +1,5 @@
+import datetime
+
 from Feature_Detection import Feature_Detection
 from Template_Detection import Template_Detection
 from Feature import Feature
@@ -21,3 +23,4 @@ class OpenCV_Core():
             self.Event=Event()
         except Exception as Errr:
             raise Errr
+        print(datetime.datetime.now(),self.__class__,'Ready',sep=' ')
