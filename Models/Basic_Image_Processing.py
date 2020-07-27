@@ -106,3 +106,8 @@ class Basic_Image_Processing():
         plt.subplot(122), plt.imshow(dst), plt.title('Output')
         plt.show()
         return dst
+
+    def Crop_Image(self,Image,X,Y,W,H):
+        W=W-X
+        H=H-Y
+        return Image[Y:Y+H, X:X+W]
