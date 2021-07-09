@@ -1,0 +1,21 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.2.1
+
+jobs:
+  build-and-test:
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          command: pip install --user requirements.txt
+          name: pip requirements.txt
+      - run:
+          command: python test/import_test.py
+          name: Import test
+
+workflows:
+  main:
+    jobs:
+      - build-and-test

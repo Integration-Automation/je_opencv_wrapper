@@ -1,2 +1,3 @@
+je_open_cv
 opencv-python
-matplotlib
+numpy
