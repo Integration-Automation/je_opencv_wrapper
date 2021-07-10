@@ -83,10 +83,9 @@ def find_object(image, find_image):
             count += 1
         else:
             if Tmp == top_left:
-                print('以上一張圖為基準', meth, '此方法與上一張結果一樣')
                 count += 1
-
         cv2.rectangle(image, top_left, bottom_right, 255, 2)
+    return image
 
 
 '''
@@ -97,16 +96,16 @@ minMaxLoc() won’t give you all the locations. In that case, we will use thresh
 '''
 
 
-def find_multi_object(Image_RGB, Template):
-    Image_RGB = cv2.imread(Image_RGB)
-    Image_GRAY = cv2.cvtColor(Image_RGB, cv2.COLOR_BGR2GRAY)
-    Template = cv2.imread(Template, 0)
-    w, h = Template.shape[::-1]
+def find_multi_object(image_rgb, template):
+    image_rgb = cv2.imread(image_rgb)
+    Image_GRAY = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2GRAY)
+    template = cv2.imread(template, 0)
+    w, h = template.shape[::-1]
 
-    res = cv2.matchTemplate(Image_GRAY, Template, cv2.TM_CCOEFF_NORMED)
+    res = cv2.matchTemplate(Image_GRAY, template, cv2.TM_CCOEFF_NORMED)
     threshold = 0.8
     loc = np.where(res >= threshold)
     for pt in zip(*loc[::-1]):
-        cv2.rectangle(Image_RGB, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+        cv2.rectangle(image_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
 
-    return Image_RGB
+    return image_rgb
