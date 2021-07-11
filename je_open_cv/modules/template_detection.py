@@ -52,20 +52,22 @@ import numpy as np
 
 # 尋找圖中的物件
 def find_object(image, find_image):
-    Tmp = (0, 0)
+    global bottom_right, top_left
+    temp = (0, 0)
     count = 0
     image = cv2.imread(image, 0)
-    Image2 = image.copy()
+    image2 = image.copy()
     template = cv2.imread(find_image, 0)
     w = template.shape[1]
     h = template.shape[0]
+    flag = False
 
     # All the 6 methods for comparison in a list
     methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR',
                'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']
 
     for meth in methods:
-        image = Image2.copy()
+        image = image2.copy()
         method = eval(meth)
 
         # Apply template Matching
@@ -79,13 +81,14 @@ def find_object(image, find_image):
         bottom_right = (top_left[0] + w, top_left[1] + h)
 
         if count == 0:
-            Tmp = top_left
+            temp = top_left
             count += 1
         else:
-            if Tmp == top_left:
+            if temp == top_left:
                 count += 1
         cv2.rectangle(image, top_left, bottom_right, 255, 2)
-    return image
+        flag = True
+    return [image, flag, top_left, bottom_right]
 
 
 '''
@@ -98,14 +101,16 @@ minMaxLoc() won’t give you all the locations. In that case, we will use thresh
 
 def find_multi_object(image_rgb, template):
     image_rgb = cv2.imread(image_rgb)
-    Image_GRAY = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2GRAY)
+    image_gray = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2GRAY)
     template = cv2.imread(template, 0)
     w, h = template.shape[::-1]
+    flag = False
 
-    res = cv2.matchTemplate(Image_GRAY, template, cv2.TM_CCOEFF_NORMED)
+    res = cv2.matchTemplate(image_gray, template, cv2.TM_CCOEFF_NORMED)
     threshold = 0.8
     loc = np.where(res >= threshold)
     for pt in zip(*loc[::-1]):
         cv2.rectangle(image_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+        flag = True
 
-    return image_rgb
+    return [image_rgb, flag]
