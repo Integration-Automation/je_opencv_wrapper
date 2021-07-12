@@ -50,68 +50,75 @@ import numpy as np
   '''
 
 
-def detect(image, template):
-    global bottom_right, top_left
-    temp = (0, 0)
-    count = 0
-    image2 = image.copy()
-    w = template.shape[1]
-    h = template.shape[0]
+def ignore_same_image(image, points, threshold, width, height, draw_image=False):
     flag = False
-
-    # All the 6 methods for comparison in a list
-    methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR',
-               'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']
-
-    for meth in methods:
-        image = image2.copy()
-        method = eval(meth)
-
-        # Apply template Matching
-        res = cv2.matchTemplate(image, template, method)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-        # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-        if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
-            top_left = min_loc
+    image_points_list = []
+    for left, top in points:
+        for image_x_y in image_points_list:
+            if ((left - image_x_y[0]) ** 2 + (top - image_x_y[1]) ** 2) < threshold ** 2:
+                break
         else:
-            top_left = max_loc
-        bottom_right = (top_left[0] + w, top_left[1] + h)
+            right = left + width
+            bottom = top + height
+            image_data_tuple = left, top, right, bottom
+            draw_detect(image, (left, top), right, bottom)
+            image_points_list.append(image_data_tuple)
+            flag = True
 
-        if count == 0:
-            temp = top_left
-            count += 1
-        else:
-            if temp == top_left:
-                count += 1
-        cv2.rectangle(image, top_left, bottom_right, 255, 2)
-        flag = True
-    return [image, flag, top_left, bottom_right]
+    return flag, image_points_list
 
 
-def detect_multi(image, template):
-    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def draw_detect(image, points, right, bottom):
+    cv2.rectangle(image, points, (right, bottom), (0, 0, 255), 2)
+
+
+def detect(image, template, draw_image=False):
+    image_points_tuple = ()
     w, h = template.shape[::-1]
     flag = False
-    res = cv2.matchTemplate(image_gray, template, cv2.TM_CCOEFF_NORMED)
+    res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
     threshold = 0.8
     loc = np.where(res >= threshold)
-    for pt in zip(*loc[::-1]):
-        cv2.rectangle(image, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+    for points in zip(*loc[::-1]):
+        right = points[0] + w
+        bottom = points[1] + h
+        image_points_tuple = points[0], points[1], right, bottom
+        if draw_image:
+            draw_detect(image, points, right, bottom)
         flag = True
-    return [image, flag]
+        break
+
+    if draw_image:
+        return image, flag, image_points_tuple
+    else:
+        return flag, image_points_tuple
+
+
+def detect_multi(image, template, draw_image=False):
+    width, height = template.shape[::-1]
+    res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
+    threshold = 0.8
+    loc = np.where(res >= threshold)
+    points = zip(*loc[::-1])
+
+    if draw_image:
+        return image, ignore_same_image(image, points, min(template.shape[0], template.shape[1]), width, height,
+                                        draw_image)
+    else:
+        return ignore_same_image(image, points, min(template.shape[0], template.shape[1]), width, height)
 
 
 # 尋找圖中的物件
-def find_object_cv2(image, template):
+def find_object_cv2(image, template, draw_image=False):
     image = cv2.imread(image, 0)
     template = cv2.imread(template, 0)
-    return detect(image, template)
+    return detect(image, template, draw_image)
 
 
-def find_object_cv2_with_pil(image, template):
+def find_object_cv2_with_pil(image, template, draw_image=False):
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
     template = cv2.imread(template, 0)
-    return detect(image, template)
+    return detect(image, template, draw_image)
 
 
 '''
@@ -122,13 +129,14 @@ minMaxLoc() won’t give you all the locations. In that case, we will use thresh
 '''
 
 
-def find_multi_object_cv2(image, template):
+def find_multi_object_cv2(image, template, draw_image=False):
     image = cv2.imread(image)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     template = cv2.imread(template, 0)
-    return detect_multi(image, template)
+    return detect_multi(image, template, draw_image)
 
 
-def find_multi_object_cv2_with_pil(image, template):
+def find_multi_object_cv2_with_pil(image, template, draw_image=False):
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
     template = cv2.imread(template, 0)
-    return detect_multi(image, template)
+    return detect_multi(image, template, draw_image)
