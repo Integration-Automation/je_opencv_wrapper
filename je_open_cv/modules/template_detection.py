@@ -50,14 +50,11 @@ import numpy as np
   '''
 
 
-# 尋找圖中的物件
-def find_object(image, find_image):
+def detect(image, template):
     global bottom_right, top_left
     temp = (0, 0)
     count = 0
-    image = cv2.imread(image, 0)
     image2 = image.copy()
-    template = cv2.imread(find_image, 0)
     w = template.shape[1]
     h = template.shape[0]
     flag = False
@@ -91,6 +88,32 @@ def find_object(image, find_image):
     return [image, flag, top_left, bottom_right]
 
 
+def detect_multi(image, template):
+    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    w, h = template.shape[::-1]
+    flag = False
+    res = cv2.matchTemplate(image_gray, template, cv2.TM_CCOEFF_NORMED)
+    threshold = 0.8
+    loc = np.where(res >= threshold)
+    for pt in zip(*loc[::-1]):
+        cv2.rectangle(image, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+        flag = True
+    return [image, flag]
+
+
+# 尋找圖中的物件
+def find_object_cv2(image, template):
+    image = cv2.imread(image, 0)
+    template = cv2.imread(template, 0)
+    return detect(image, template)
+
+
+def find_object_cv2_with_pil(image, template):
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
+    template = cv2.imread(template, 0)
+    return detect(image, template)
+
+
 '''
 尋找圖中的多個重複物件
 which occurs only once in the image. 
@@ -99,18 +122,13 @@ minMaxLoc() won’t give you all the locations. In that case, we will use thresh
 '''
 
 
-def find_multi_object(image_rgb, template):
-    image_rgb = cv2.imread(image_rgb)
-    image_gray = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2GRAY)
+def find_multi_object_cv2(image, template):
+    image = cv2.imread(image)
     template = cv2.imread(template, 0)
-    w, h = template.shape[::-1]
-    flag = False
+    return detect_multi(image, template)
 
-    res = cv2.matchTemplate(image_gray, template, cv2.TM_CCOEFF_NORMED)
-    threshold = 0.8
-    loc = np.where(res >= threshold)
-    for pt in zip(*loc[::-1]):
-        cv2.rectangle(image_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
-        flag = True
 
-    return [image_rgb, flag]
+def find_multi_object_cv2_with_pil(image, template):
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
+    template = cv2.imread(template, 0)
+    return detect_multi(image, template)
