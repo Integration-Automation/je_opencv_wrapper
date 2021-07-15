@@ -19,8 +19,6 @@ setuptools.setup(
         "Development Status :: 2 - Pre-Alpha",
         "Environment :: Win32 (MS Windows)",
         "License :: OSI Approved :: MIT License",
-        "Natural Language :: Chinese (Traditional)",
-        "Operating System :: Microsoft"
     ]
 )
 

@@ -15,5 +15,5 @@ If it is True, it uses the equation mentioned above which is more accurate, By d
 
 
 # Canny 邊緣檢測
-def Canny_Edge(Image, Min=100, Max=200):
-    return cv2.Canny(Image, Min, Max)
+def canny_edge(image, edge_min=100, edge_max=200):
+    return cv2.Canny(image, edge_min, edge_max)

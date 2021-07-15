@@ -1,5 +1,4 @@
 from je_open_cv.modules import contours
-from je_open_cv.modules import cv_event
 from je_open_cv.modules import draw
 from je_open_cv.modules import edge
 from je_open_cv.modules import face_detection

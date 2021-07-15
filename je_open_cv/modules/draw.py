@@ -60,16 +60,13 @@ class draw(object):
     def clear_canvas(self, clear_flag=True):
         self.clear_flag = clear_flag
 
-    def show_canvas(self, canvas_name='Canvas'):
+    def show_canvas(self, canvas_name='Canvas', exit_key="q"):
         while True:
             cv2.imshow(canvas_name, self.canvas)
-
-            Key = cv2.waitKey(1) & 0xFF
-
-            if Key == ord('q') or Key == 27:
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord(exit_key) or key == 27:
                 break
-
-            elif Key == ord(self.clear_key) and self.clear_flag is True:
+            elif key == ord(self.clear_key) and self.clear_flag is True:
                 self.canvas = create_canvas()
 
         cv2.destroyAllWindows()

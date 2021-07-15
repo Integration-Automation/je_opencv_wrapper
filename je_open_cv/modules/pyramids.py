@@ -35,8 +35,10 @@ Finally from this joint image pyramids, reconstruct the original image.
 將2張圖片融合
 '''
 
+global cols
 
-def Blending_Image_Pyramids(image1, image2):
+
+def blending_image_pyramids(image1, image2):
     # generate Gaussian pyramid for A
     global cols
     g = image1.copy()
