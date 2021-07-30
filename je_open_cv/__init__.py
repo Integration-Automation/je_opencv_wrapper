@@ -19,3 +19,4 @@ from je_open_cv.modules import template_detection
 from je_open_cv.modules import thresholding
 from je_open_cv.modules import ui
 from je_open_cv.modules import video
+

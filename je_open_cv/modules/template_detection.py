@@ -61,7 +61,8 @@ def ignore_same_image(image, points, threshold, width, height, draw_image=False)
             right = left + width
             bottom = top + height
             image_data_tuple = left, top, right, bottom
-            draw_detect(image, (left, top), right, bottom)
+            if draw_image:
+                draw_detect(image, (left, top), right, bottom)
             image_points_list.append(image_data_tuple)
             flag = True
 
@@ -72,12 +73,12 @@ def draw_detect(image, points, right, bottom):
     cv2.rectangle(image, points, (right, bottom), (0, 0, 255), 2)
 
 
-def detect(image, template, draw_image=False):
+def detect(image, template, detect_threshold=1, draw_image=False):
     image_points_tuple = ()
     w, h = template.shape[::-1]
     flag = False
     res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
-    threshold = 0.8
+    threshold = detect_threshold
     loc = np.where(res >= threshold)
     for points in zip(*loc[::-1]):
         right = points[0] + w
@@ -94,10 +95,10 @@ def detect(image, template, draw_image=False):
         return flag, image_points_tuple
 
 
-def detect_multi(image, template, draw_image=False):
+def detect_multi(image, template, detect_threshold=1, draw_image=False):
     width, height = template.shape[::-1]
     res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
-    threshold = 0.8
+    threshold = detect_threshold
     loc = np.where(res >= threshold)
     points = zip(*loc[::-1])
 
@@ -109,16 +110,16 @@ def detect_multi(image, template, draw_image=False):
 
 
 # 尋找圖中的物件
-def find_object_cv2(image, template, draw_image=False):
+def find_object_cv2(image, template, detect_threshold=1, draw_image=False):
     image = cv2.imread(image, 0)
     template = cv2.imread(template, 0)
-    return detect(image, template, draw_image)
+    return detect(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
 
 
-def find_object_cv2_with_pil(image, template, draw_image=False):
+def find_object_cv2_with_pil(image, template, detect_threshold=1, draw_image=False):
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
     template = cv2.imread(template, 0)
-    return detect(image, template, draw_image)
+    return detect(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
 
 
 '''
@@ -129,14 +130,14 @@ minMaxLoc() won’t give you all the locations. In that case, we will use thresh
 '''
 
 
-def find_multi_object_cv2(image, template, draw_image=False):
+def find_multi_object_cv2(image, template, detect_threshold=1, draw_image=False):
     image = cv2.imread(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     template = cv2.imread(template, 0)
-    return detect_multi(image, template, draw_image)
+    return detect_multi(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
 
 
-def find_multi_object_cv2_with_pil(image, template, draw_image=False):
+def find_multi_object_cv2_with_pil(image, template, detect_threshold=1, draw_image=False):
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
     template = cv2.imread(template, 0)
-    return detect_multi(image, template, draw_image)
+    return detect_multi(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
