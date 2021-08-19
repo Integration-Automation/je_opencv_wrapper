@@ -90,7 +90,7 @@ def detect(image, template, detect_threshold=1, draw_image=False):
         break
 
     if draw_image:
-        return image, flag, image_points_tuple
+        return flag, image_points_tuple, image
     else:
         return flag, image_points_tuple
 
@@ -110,15 +110,15 @@ def detect_multi(image, template, detect_threshold=1, draw_image=False):
 
 
 # 尋找圖中的物件
-def find_object_cv2(image, template, detect_threshold=1, draw_image=False):
-    image = cv2.imread(image, 0)
-    template = cv2.imread(template, 0)
-    return detect(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
-
-
-def find_object_cv2_with_pil(image, template, detect_threshold=1, draw_image=False):
-    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
-    template = cv2.imread(template, 0)
+def find_object(image, template, detect_threshold=1, draw_image=False):
+    if type(image) is str:
+        image = cv2.imread(image, 0)
+    else:
+        image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
+    if type(template) is str:
+        template = cv2.imread(template, 0)
+    else:
+        template = cv2.cvtColor(np.array(template), cv2.COLOR_RGB2GRAY)
     return detect(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
 
 
@@ -130,14 +130,13 @@ minMaxLoc() won’t give you all the locations. In that case, we will use thresh
 '''
 
 
-def find_multi_object_cv2(image, template, detect_threshold=1, draw_image=False):
-    image = cv2.imread(image)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    template = cv2.imread(template, 0)
-    return detect_multi(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
-
-
-def find_multi_object_cv2_with_pil(image, template, detect_threshold=1, draw_image=False):
-    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
-    template = cv2.imread(template, 0)
+def find_multi_object(image, template, detect_threshold=1, draw_image=False):
+    if type(image) is str:
+        image = cv2.imread(image, 0)
+    else:
+        image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
+    if type(template) is str:
+        template = cv2.imread(template, 0)
+    else:
+        template = cv2.cvtColor(np.array(template), cv2.COLOR_RGB2GRAY)
     return detect_multi(image=image, template=template, detect_threshold=detect_threshold, draw_image=draw_image)
