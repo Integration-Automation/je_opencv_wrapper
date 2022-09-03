@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Python_OPENCV_JE.iml" filepath="$PROJECT_DIR$/.idea/Python_OPENCV_JE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/OpenCV_Wrapper_JE.iml" filepath="$PROJECT_DIR$/.idea/OpenCV_Wrapper_JE.iml" />
     </modules>
   </component>
 </project>

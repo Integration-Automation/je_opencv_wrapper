@@ -1,21 +1,43 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@1.2.1
+  python: circleci/python@2.0.3
 
 jobs:
-  build-and-test:
-    executor: python/default
+  build-and-test-windows-dev:
+    executor:
+      name: python/default
+
     steps:
       - checkout
+      # upgrade
+      - run:
+          command: pip install --upgrade --user pip setuptools wheel
+          name: pip install --upgrade --user pip setuptools wheel
+      # pip require package
+      - run:
+          command: pip install --user -r dev_requirements.txt
+          name: pip dev_requirements.txt
+
+  build-and-test-windows-stable:
+    executor:
+      name: python/default
+
+    steps:
+      - checkout
+      # upgrade
+      - run:
+          command: pip install --upgrade --user pip setuptools wheel
+          name: pip install --upgrade --user pip setuptools wheel
+      # pip require package
       - run:
           command: pip install --user -r requirements.txt
-          name: pip requirements.txt
-      - run:
-          command: python circleci_test/cv2_detect_test.py
-          name: Detect test
+          name: pip dev_requirements.txt
 
 workflows:
   main:
     jobs:
-      - build-and-test
+      - build-and-test-windows-dev
+      - build-and-test-windows-stable:
+          requires:
+            - build-and-test-windows-dev

@@ -4,8 +4,8 @@ with open("README.md", "r") as README:
     long_description = README.read()
 
 setuptools.setup(
-    name="je_open_cv",
-    version="0.0.19",
+    name="je_open_cv_dev",
+    version="0.0.2",
     author="JE-Chen",
     author_email="zenmailman@gmail.com",
     description="JEChen's OpenCV wrapper",
