@@ -1,0 +1,35 @@
+# Rename to stable version
+# This is stable version
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "je_open_cv"
+version = "0.0.21"
+authors = [
+    { name = "JE-Chen", email = "zenmailman@gmail.com" },
+]
+description = "Load & Stress Testing Freamework"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.7"
+license = { text = "MIT" }
+dependencies = [
+        "opencv-python",
+        "numpy"
+]
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: MacOS X",
+    "Environment :: X11 Applications",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/JE-Chen/je_opencv_wrapper"
+
+[tool.setuptools.packages]
+find = { }
